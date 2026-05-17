@@ -1,3 +1,4 @@
+using Aspire.Hosting;
 using Aspire.Hosting.ApplicationModel;
 using Novolis.Aspire.Hosting.Signoz;
 
@@ -14,6 +15,12 @@ public static class SignozHostingExtensions
     private const string SignozHostEnvVar = "SIGNOZ_HOST";
     private const string LowCardinalityEnvVar = "LOW_CARDINAL_EXCEPTION_GROUPING";
 
+    /// <summary>Secondary OTLP endpoint for SigNoz; does not replace Aspire dashboard <c>OTEL_EXPORTER_OTLP_ENDPOINT</c>.</summary>
+    public const string SignozOtelExporterOtlpEndpointVar = "SIGNOZ_OTEL_EXPORTER_OTLP_ENDPOINT";
+
+    /// <summary>OTLP protocol for <see cref="SignozOtelExporterOtlpEndpointVar"/> (e.g. <c>grpc</c>).</summary>
+    public const string SignozOtelExporterOtlpProtocolVar = "SIGNOZ_OTEL_EXPORTER_OTLP_PROTOCOL";
+
     /// <summary>
     /// Adds a SigNoz observability stack (ZooKeeper, ClickHouse, SigNoz UI, schema migrator, and OTLP collector).
     /// </summary>
@@ -22,15 +29,18 @@ public static class SignozHostingExtensions
     /// <param name="httpPort">Optional host port for the SigNoz UI (container port 8080).</param>
     /// <param name="otlpGrpcPort">Optional host port for OTLP gRPC ingestion (container port 4317).</param>
     /// <param name="otlpHttpPort">Optional host port for OTLP HTTP ingestion (container port 4318).</param>
+    /// <param name="options">Optional Podman lifetime and fixed container names (see Garnet/Raven-style persistent dev stacks).</param>
     public static IResourceBuilder<SignozContainerResource> AddSignoz(
         this IDistributedApplicationBuilder builder,
         [ResourceName] string name,
         int? httpPort = null,
         int? otlpGrpcPort = null,
-        int? otlpHttpPort = null)
+        int? otlpHttpPort = null,
+        SignozHostingOptions? options = null)
     {
         ArgumentNullException.ThrowIfNull(builder);
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        options ??= new SignozHostingOptions();
 
         var zookeeperName = $"{name}-zookeeper-1";
         var clickhouseName = $"{name}-clickhouse";
@@ -47,7 +57,10 @@ public static class SignozHostingExtensions
         var otelConfigPath = Path.Combine(assetsPath, "otel-collector-config.yaml");
         var opampConfigPath = Path.Combine(assetsPath, "otel-collector-opamp-config.yaml");
 
-        var zookeeper = builder.AddContainer(zookeeperName, SignozContainerImageTags.ZookeeperImage, SignozContainerImageTags.ZookeeperTag)
+        var zookeeper = ConfigureContainer(
+                builder.AddContainer(zookeeperName, SignozContainerImageTags.ZookeeperImage, SignozContainerImageTags.ZookeeperTag),
+                options.Lifetime,
+                options.ZookeeperContainerName)
             .WithImageRegistry(SignozContainerImageTags.Registry)
             .WithEnvironment("ZOO_SERVER_ID", "1")
             .WithEnvironment("ALLOW_ANONYMOUS_LOGIN", "yes")
@@ -58,7 +71,10 @@ public static class SignozHostingExtensions
             .WithHttpEndpoint(targetPort: 8080, name: "http")
             .WithHttpHealthCheck("/commands/ruok", endpointName: "http", statusCode: 200);
 
-        var clickhouse = builder.AddContainer(clickhouseName, SignozContainerImageTags.ClickHouseImage, SignozContainerImageTags.ClickHouseTag)
+        var clickhouse = ConfigureContainer(
+                builder.AddContainer(clickhouseName, SignozContainerImageTags.ClickHouseImage, SignozContainerImageTags.ClickHouseTag),
+                options.Lifetime,
+                options.ClickHouseContainerName)
             .WithImageRegistry(SignozContainerImageTags.Registry)
             .WithEnvironment("CLICKHOUSE_SKIP_USER_SETUP", "1")
             .WithBindMount(Path.Combine(clickhouseAssets, "config.xml"), "/etc/clickhouse-server/config.xml")
@@ -71,7 +87,10 @@ public static class SignozHostingExtensions
             .WithHttpHealthCheck("/ping", endpointName: "http", statusCode: 200)
             .WaitFor(zookeeper);
 
-        var signozUi = builder.AddContainer(signozUiName, SignozContainerImageTags.SignozImage, SignozContainerImageTags.SignozTag)
+        var signozUi = ConfigureContainer(
+                builder.AddContainer(signozUiName, SignozContainerImageTags.SignozImage, SignozContainerImageTags.SignozTag),
+                options.Lifetime,
+                options.SignozUiContainerName)
             .WithImageRegistry(SignozContainerImageTags.Registry)
             .WithEnvironment("SIGNOZ_ALERTMANAGER_PROVIDER", "signoz")
             .WithEnvironment("SIGNOZ_TELEMETRYSTORE_CLICKHOUSE_DSN", $"tcp://{clickhouseName}:9000")
@@ -82,11 +101,14 @@ public static class SignozHostingExtensions
             .WithHttpHealthCheck("/api/v1/health", endpointName: SignozContainerResource.UiEndpointName, statusCode: 200)
             .WaitFor(clickhouse);
 
-        var migrator = builder.AddContainer(migratorName, SignozContainerImageTags.OtelCollectorImage, SignozContainerImageTags.OtelCollectorTag)
+        var migrator = ConfigureContainer(
+                builder.AddContainer(migratorName, SignozContainerImageTags.OtelCollectorImage, SignozContainerImageTags.OtelCollectorTag),
+                options.MigratorLifetime,
+                options.MigratorContainerName)
             .WithImageRegistry(SignozContainerImageTags.Registry)
             .WithEnvironment(ClickHouseDsnEnvVar, $"tcp://{clickhouseName}:9000")
             .WithEnvironment(ClickHouseClusterEnvVar, "cluster")
-            .WithEnvironment(ClickHouseReplicationEnvVar, "true")
+            .WithEnvironment(ClickHouseReplicationEnvVar, "false")
             .WithEnvironment(ClickHouseTimeoutEnvVar, "10m")
             .WithEntrypoint("/bin/sh")
             .WithArgs(
@@ -99,7 +121,10 @@ public static class SignozHostingExtensions
             UiEndpointReference = new EndpointReference(signozUi.Resource, SignozContainerResource.UiEndpointName),
         };
 
-        var collectorBuilder = builder.AddResource(collector)
+        var collectorBuilder = ConfigureContainer(
+                builder.AddResource(collector),
+                options.Lifetime,
+                options.CollectorContainerName)
             .WithImage(SignozContainerImageTags.OtelCollectorImage, SignozContainerImageTags.OtelCollectorTag)
             .WithImageRegistry(SignozContainerImageTags.Registry)
             .WithEndpoint(
@@ -122,7 +147,7 @@ public static class SignozHostingExtensions
             .WithEnvironment(SignozHostEnvVar, signozUiName)
             .WithEnvironment(ClickHouseDsnEnvVar, $"tcp://{clickhouseName}:9000")
             .WithEnvironment(ClickHouseClusterEnvVar, "cluster")
-            .WithEnvironment(ClickHouseReplicationEnvVar, "true")
+            .WithEnvironment(ClickHouseReplicationEnvVar, "false")
             .WithEnvironment(ClickHouseTimeoutEnvVar, "10m")
             .WithEnvironment(LowCardinalityEnvVar, "false")
             .WithEnvironment("OTEL_RESOURCE_ATTRIBUTES", "host.name=signoz-host,os.type=linux")
@@ -139,7 +164,9 @@ public static class SignozHostingExtensions
     }
 
     /// <summary>
-    /// Routes OpenTelemetry exporters on a project to the SigNoz OTLP gRPC endpoint.
+    /// Adds SigNoz OTLP env vars for a secondary exporter. Does not set <c>OTEL_EXPORTER_OTLP_ENDPOINT</c>
+    /// so Aspire dashboard OTLP remains the default sink; apps should also export using
+    /// <c>SIGNOZ_OTEL_EXPORTER_OTLP_ENDPOINT</c> / <c>SIGNOZ_OTEL_EXPORTER_OTLP_PROTOCOL</c>.
     /// </summary>
     public static IResourceBuilder<ProjectResource> WithSignozOtlpExporter(
         this IResourceBuilder<ProjectResource> builder,
@@ -150,8 +177,21 @@ public static class SignozHostingExtensions
 
         return builder
             .WithReference(signoz)
-            .WithEnvironment("OTEL_EXPORTER_OTLP_ENDPOINT", signoz.Resource.OtlpGrpcUriExpression)
-            .WithEnvironment("OTEL_EXPORTER_OTLP_PROTOCOL", "grpc");
+            .WithEnvironment(SignozOtelExporterOtlpEndpointVar, signoz.Resource.OtlpGrpcUriExpression)
+            .WithEnvironment(SignozOtelExporterOtlpProtocolVar, "grpc");
+    }
+
+    private static IResourceBuilder<T> ConfigureContainer<T>(
+        IResourceBuilder<T> container,
+        ContainerLifetime lifetime,
+        string? containerName)
+        where T : ContainerResource
+    {
+        container = container.WithLifetime(lifetime);
+        if (!string.IsNullOrWhiteSpace(containerName))
+            container = container.WithContainerName(containerName);
+
+        return container;
     }
 
 }

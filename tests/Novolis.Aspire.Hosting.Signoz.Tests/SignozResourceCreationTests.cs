@@ -65,11 +65,37 @@ public sealed class SignozResourceCreationTests
 
         var clusterXml = await File.ReadAllTextAsync(Path.Combine(assetsPath, "clickhouse", "config.d", "cluster.xml"));
         await Assert.That(clusterXml).Contains("<host>demo-zookeeper-1</host>");
+        await Assert.That(clusterXml).Contains("<host>demo-clickhouse</host>");
+        await Assert.That(clusterXml).DoesNotContain("<host>clickhouse</host>");
 
         var otelConfig = await File.ReadAllTextAsync(Path.Combine(assetsPath, "otel-collector-config.yaml"));
         await Assert.That(otelConfig).Contains("${env:CLICKHOUSE_HOST}");
 
         var opampConfig = await File.ReadAllTextAsync(Path.Combine(assetsPath, "otel-collector-opamp-config.yaml"));
         await Assert.That(opampConfig).Contains("${env:SIGNOZ_HOST}");
+    }
+
+    [Test]
+    public async Task WithSignozOtlpExporter_sets_signoz_env_only_not_dashboard_otlp()
+    {
+        var builder = DistributedApplication.CreateBuilder();
+        var signoz = builder.AddSignoz("signoz");
+        var fixtureProject = Path.GetFullPath(
+            Path.Combine(AppContext.BaseDirectory, "Fixtures", "MinimalApi", "MinimalApi.csproj"));
+        builder.AddProject("api", fixtureProject)
+            .WithSignozOtlpExporter(signoz);
+
+        await using var app = builder.Build();
+        var appModel = app.Services.GetRequiredService<DistributedApplicationModel>();
+        var project = appModel.Resources.OfType<ProjectResource>().Single();
+
+#pragma warning disable CS0618 // GetEnvironmentVariableValuesAsync — documented Aspire test API
+        var env = await project.GetEnvironmentVariableValuesAsync(DistributedApplicationOperation.Publish);
+#pragma warning restore CS0618
+
+        await Assert.That(env.Keys).Contains(SignozHostingExtensions.SignozOtelExporterOtlpEndpointVar);
+        await Assert.That(env.Keys).Contains(SignozHostingExtensions.SignozOtelExporterOtlpProtocolVar);
+        await Assert.That(env.Keys).DoesNotContain("OTEL_EXPORTER_OTLP_ENDPOINT");
+        await Assert.That(env.Keys).DoesNotContain("OTEL_EXPORTER_OTLP_PROTOCOL");
     }
 }

@@ -1,0 +1,11 @@
+<Project>
+  <Target Name="CopyNovolisAspireHostingSignozAssetsToOutput" AfterTargets="ResolveReferences">
+    <ItemGroup>
+      <_SignozAssetFiles Include="$(MSBuildThisFileDirectory)../contentFiles/any/any/assets/**" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_SignozAssetFiles)"
+          DestinationFiles="@(_SignozAssetFiles->'$(OutputPath)assets/%(RecursiveDir)%(Filename)%(Extension)')"
+          SkipUnchangedFiles="true"
+          Condition="'@(_SignozAssetFiles)' != ''" />
+  </Target>
+</Project>
