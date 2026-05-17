@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>Novolis.Aspire.Hosting.Signoz</PackageId>
+    <Version>0.1.0-preview.1</Version>
+    <IsPackable>true</IsPackable>
+    <Description>Aspire hosting integration for SigNoz observability (multi-container local stack).</Description>
+    <RootNamespace>Novolis.Aspire.Hosting.Signoz</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\**\*" Pack="true" PackagePath="contentFiles/any/any/assets" CopyToOutputDirectory="PreserveNewest" />
+    <InternalsVisibleTo Include="Novolis.Aspire.Hosting.Signoz.Tests" />
+  </ItemGroup>
+</Project>
