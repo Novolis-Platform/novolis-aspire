@@ -6,6 +6,8 @@ namespace Aspire.Hosting.ApplicationModel;
 /// <param name="name">Aspire resource name for the collector.</param>
 public sealed class SignozContainerResource(string name) : ContainerResource(name), IResourceWithConnectionString
 {
+    internal EndpointReference? UiEndpointReference { get; init; }
+
     internal const int OtlpGrpcPort = 4317;
     internal const int OtlpHttpPort = 4318;
     internal const int UiPort = 8080;
@@ -18,8 +20,6 @@ public sealed class SignozContainerResource(string name) : ContainerResource(nam
 
     private EndpointReference? _otlpGrpcEndpoint;
     private EndpointReference? _otlpHttpEndpoint;
-    private EndpointReference? _uiEndpoint;
-
     /// <summary>OTLP gRPC endpoint (port 4317).</summary>
     public EndpointReference OtlpGrpcEndpoint =>
         _otlpGrpcEndpoint ??= new EndpointReference(this, OtlpGrpcEndpointName);
@@ -28,9 +28,11 @@ public sealed class SignozContainerResource(string name) : ContainerResource(nam
     public EndpointReference OtlpHttpEndpoint =>
         _otlpHttpEndpoint ??= new EndpointReference(this, OtlpHttpEndpointName);
 
-    /// <summary>SigNoz UI HTTP endpoint (port 8080).</summary>
+    /// <summary>SigNoz UI HTTP endpoint (port 8080) on the companion UI container.</summary>
     public EndpointReference UiEndpoint =>
-        _uiEndpoint ??= new EndpointReference(this, UiEndpointName);
+        UiEndpointReference
+        ?? throw new InvalidOperationException(
+            "The SigNoz UI endpoint is not configured. Use AddSignoz to provision the stack.");
 
     /// <summary>OTLP gRPC host.</summary>
     public EndpointReferenceExpression OtlpGrpcHost =>

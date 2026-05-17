@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="JetBrains.Annotations" />
+    <PackageReference Include="TUnit" />
+    <ProjectReference Include="..\..\src\Novolis.Aspire.Hosting.Signoz\Novolis.Aspire.Hosting.Signoz.csproj" />
+  </ItemGroup>
+</Project>

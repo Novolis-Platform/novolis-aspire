@@ -1,1 +1,15 @@
-{"packages":{}}
+{
+  "packages": {
+    "Novolis.Aspire.Hosting.Signoz": {
+      "paths": [
+        "src/Novolis.Aspire.Hosting.Signoz/**",
+        "tests/Novolis.Aspire.Hosting.Signoz.Tests/**",
+        "Directory.Build.props",
+        "Directory.Packages.props",
+        "global.json",
+        "Novolis.Aspire.slnx"
+      ],
+      "project": "src/Novolis.Aspire.Hosting.Signoz/Novolis.Aspire.Hosting.Signoz.csproj"
+    }
+  }
+}
