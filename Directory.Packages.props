@@ -3,6 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.203" />
     <PackageVersion Include="Aspire.Hosting" Version="13.3.3" />
     <PackageVersion Include="FluentAssertions" Version="8.9.0" />
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.4" />
