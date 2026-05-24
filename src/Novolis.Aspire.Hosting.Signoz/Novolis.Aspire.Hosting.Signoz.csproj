@@ -14,6 +14,7 @@
           PackagePath="contentFiles/any/any/assets/%(RecursiveDir)%(Filename)%(Extension)"
           CopyToOutputDirectory="PreserveNewest"
           PackageCopyToOutput="true" />
+    <InternalsVisibleTo Include="Novolis.Aspire.Unit" />
     <InternalsVisibleTo Include="Novolis.Aspire.Hosting.Signoz.Tests" />
   </ItemGroup>
   <ItemGroup>

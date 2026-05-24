@@ -3,7 +3,7 @@
     "Novolis.Aspire.Hosting.Signoz": {
       "paths": [
         "src/Novolis.Aspire.Hosting.Signoz/**",
-        "tests/Novolis.Aspire.Unit/Hosting.Signoz/**",
+        "tests/Novolis.Aspire.Unit/**",
         "Directory.Build.props",
         "Directory.Packages.props",
         "global.json",
