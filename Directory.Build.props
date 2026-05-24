@@ -1,4 +1,8 @@
 <Project>
+  
+  <Import Project="$(MSBuildThisFileDirectory).novolis\version.props"
+          Condition="Exists('$(MSBuildThisFileDirectory).novolis\version.props')" />
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>

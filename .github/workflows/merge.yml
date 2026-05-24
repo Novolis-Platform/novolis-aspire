@@ -1,0 +1,25 @@
+name: CI: main
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '.novolis/version.props'
+  workflow_dispatch:
+    inputs:
+      skip_publish:
+        description: Build and bump only; do not push to nuget.org
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  merge_job:
+    name: Build, publish, bump build
+    uses: Novolis-Platform/novolis-workflows/.github/workflows/dotnet-merge-publish.yml@main
+    with:
+      skip_publish: ${{ inputs.skip_publish == true }}
+    secrets: inherit
