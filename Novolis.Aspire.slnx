@@ -3,6 +3,6 @@
     <Project Path="src/Novolis.Aspire.Hosting.Signoz/Novolis.Aspire.Hosting.Signoz.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/Novolis.Aspire.Hosting.Signoz.Tests/Novolis.Aspire.Hosting.Signoz.Tests.csproj" />
-  </Folder>
+    <Project Path="tests/Novolis.Aspire.Unit/Novolis.Aspire.Unit.csproj" />
+    </Folder>
 </Solution>
