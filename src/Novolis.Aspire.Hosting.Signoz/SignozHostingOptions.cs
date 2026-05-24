@@ -2,7 +2,7 @@ using Aspire.Hosting.ApplicationModel;
 
 namespace Novolis.Aspire.Hosting.Signoz;
 
-/// <summary>Podman/container hosting options for <see cref="SignozHostingExtensions.AddSignoz"/>.</summary>
+/// <summary>Podman/container hosting options for <c>AddSignoz</c>.</summary>
 public sealed class SignozHostingOptions
 {
     /// <summary>Lifetime for ZooKeeper, ClickHouse, SigNoz UI, and the OTLP collector.</summary>

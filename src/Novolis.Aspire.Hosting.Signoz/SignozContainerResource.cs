@@ -75,6 +75,7 @@ public sealed class SignozContainerResource(string name) : ContainerResource(nam
     public ReferenceExpression UiUriExpression =>
         ReferenceExpression.Create($"http://{UiHost}:{UiPortExpression}");
 
+    /// <inheritdoc />
     IEnumerable<KeyValuePair<string, ReferenceExpression>> IResourceWithConnectionString.GetConnectionProperties()
     {
         yield return new("OtlpGrpcEndpoint", OtlpGrpcUriExpression);

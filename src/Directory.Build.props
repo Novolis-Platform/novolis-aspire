@@ -1,0 +1,11 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)..\Directory.Build.props" />
+  <Import Project="$(MSBuildThisFileDirectory)..\build\Novolis.Aspire.Documentation.props"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\build\Novolis.Aspire.Documentation.props')" />
+  <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" Condition="Exists('README.md')" />
+  </ItemGroup>
+</Project>
