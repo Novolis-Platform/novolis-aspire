@@ -22,4 +22,5 @@ jobs:
     uses: Novolis-Platform/novolis-workflows/.github/workflows/dotnet-merge-publish.yml@main
     with:
       skip_publish: ${{ inputs.skip_publish == true }}
+      nuget-username: ${{ vars.NUGET_USERNAME }}
     secrets: inherit
