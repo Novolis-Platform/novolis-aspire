@@ -4,6 +4,6 @@
     <NovolisVersionMajor>0</NovolisVersionMajor>
     <NovolisVersionMinor>0</NovolisVersionMinor>
     <NovolisVersionPatch>1</NovolisVersionPatch>
-    <NovolisVersionBuild>1</NovolisVersionBuild>
+    <NovolisVersionBuild>2</NovolisVersionBuild>
   </PropertyGroup>
 </Project>
