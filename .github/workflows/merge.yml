@@ -15,6 +15,7 @@ on:
 jobs:
   ci:
     uses: Novolis-Platform/novolis-workflows/.github/workflows/dotnet-merge-publish.yml@main
+    secrets: inherit
     with:
       skip_publish: ${{ inputs.skip_publish == true }}
     permissions:
