@@ -3,10 +3,9 @@
     <PropertyGroup>
     <NovolisGitHubRepository>novolis-aspire</NovolisGitHubRepository>
   </PropertyGroup>
-<Import Project="$(MSBuildThisFileDirectory).novolis\version.props"
-          Condition="Exists('$(MSBuildThisFileDirectory).novolis\version.props')" />
-
-  <PropertyGroup>
+  <Import Project="$(MSBuildThisFileDirectory)build\version.props"
+          Condition="Exists('$(MSBuildThisFileDirectory)build\version.props')" />
+<PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>

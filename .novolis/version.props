@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project>
-  <PropertyGroup Label="Novolis package version (major.minor.patch.build)">
-    <NovolisVersionMajor>0</NovolisVersionMajor>
-    <NovolisVersionMinor>0</NovolisVersionMinor>
-    <NovolisVersionPatch>1</NovolisVersionPatch>
-    <NovolisVersionBuild>2</NovolisVersionBuild>
-  </PropertyGroup>
-</Project>

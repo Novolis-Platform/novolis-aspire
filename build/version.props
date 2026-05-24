@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Generated from build/version.json via scripts/sync-version-props.ps1 -->
+  <PropertyGroup Label="Novolis platform version">
+    <NovolisSdkYear>2026</NovolisSdkYear>
+    <NovolisApiBreak>1</NovolisApiBreak>
+    <NovolisFeature>0</NovolisFeature>
+    <NovolisStableVersion>2026.1.0</NovolisStableVersion>
+    <NovolisPackageFloatVersion>2026.1.*</NovolisPackageFloatVersion>
+  </PropertyGroup>
+</Project>

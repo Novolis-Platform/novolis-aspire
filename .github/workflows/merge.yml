@@ -3,7 +3,8 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - '.novolis/version.props'
+      - 'build/version.json'
+      - 'build/version.props'
       - 'docs/**'
       - '**.md'
   workflow_dispatch:
@@ -17,5 +18,4 @@ jobs:
     with:
       skip_publish: ${{ inputs.skip_publish == true }}
     permissions:
-      contents: write
       packages: write
