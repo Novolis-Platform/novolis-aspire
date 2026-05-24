@@ -1,14 +1,11 @@
 name: Release
-
 on:
   release:
     types: [published]
-
-permissions:
-  contents: read
-  packages: write
-
 jobs:
-  publish:
-    uses: Novolis-Platform/novolis-workflows/.github/workflows/dotnet-publish-nuget.yml@main
-    secrets: inherit
+  ci:
+    uses: Novolis-Platform/novolis-workflows/.github/workflows/dotnet-release-publish.yml@main
+    secrets:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+    permissions:
+      contents: write

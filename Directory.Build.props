@@ -1,6 +1,9 @@
 <Project>
   
-  <Import Project="$(MSBuildThisFileDirectory).novolis\version.props"
+    <PropertyGroup>
+    <NovolisGitHubRepository>novolis-aspire</NovolisGitHubRepository>
+  </PropertyGroup>
+<Import Project="$(MSBuildThisFileDirectory).novolis\version.props"
           Condition="Exists('$(MSBuildThisFileDirectory).novolis\version.props')" />
 
   <PropertyGroup>
@@ -26,4 +29,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+  <Import Project="$(MSBuildThisFileDirectory)..\novolis-governance\build\Novolis.GitHubPackages.props"
+          Condition="Exists('$(MSBuildThisFileDirectory)..\novolis-governance\build\Novolis.GitHubPackages.props')" />
 </Project>
