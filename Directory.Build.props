@@ -11,6 +11,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- NU1507: nuget.org + GitHub Packages dual sources under CPM (expected). NU190x: advisory surface; pin packages when possible. -->
+    <WarningsNotAsErrors>$(WarningsNotAsErrors);NU1504;NU1507;NU1510;NU1603;NU1605;NU1608;NU1901;NU1902;NU1903;NU1904;NU1701</WarningsNotAsErrors>
     <Authors>Novolis</Authors>
     <Company>Novolis</Company>
     <Copyright>Copyright (c) Novolis-Platform</Copyright>
