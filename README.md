@@ -1,3 +1,17 @@
+<!-- novolis-package-index:start -->
+> **GitHub Packages shows this repository README on every package page** (upstream limitation).
+> Open the **package README** for install and quick start — embedded in each .nupkg and linked below.
+
+## Published packages
+
+| Package | Install | Package README |
+|---------|---------|----------------|
+| `Novolis.Aspire.Hosting.Signoz` | `dotnet add package Novolis.Aspire.Hosting.Signoz` | [README](https://github.com/Novolis-Platform/novolis-aspire/blob/main/src/Novolis.Aspire.Hosting.Signoz/README.md) |
+
+For NuGet.org and Visual Studio, the **embedded** README.md inside each package is authoritative.
+
+<!-- novolis-package-index:end -->
+
 # novolis-aspire
 
 Aspire hosting integrations for the Novolis platform.
@@ -6,7 +20,9 @@ Aspire hosting integrations for the Novolis platform.
 
 | Package | Description |
 | --- | --- |
-| `Novolis.Aspire.Hosting.Signoz` | Local [SigNoz](https://signoz.io/) stack (ZooKeeper, ClickHouse, UI, OTLP collector) for AppHosts |
+| [Novolis.Aspire.Hosting.Signoz](src/Novolis.Aspire.Hosting.Signoz/README.md) | Local [SigNoz](https://signoz.io/) stack (ZooKeeper, ClickHouse, UI, OTLP collector) for AppHosts |
+
+Restore from **GitHub Packages** (`2026.1.*`) and **nuget.org**. Use **`Novolis.Platform.slnx`** for local ProjectReference iteration on Aspire-related platform libs.
 
 ## SigNoz
 
