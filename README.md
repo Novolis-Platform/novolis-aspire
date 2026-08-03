@@ -1,3 +1,35 @@
+<!-- novolis-marketing:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-brand-transparent.svg" width="360" alt="Novolis"/>
+  </a>
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/banners/novolis-aspire.svg" width="100%" alt="novolis-aspire"/>
+</p>
+
+<p align="center">
+  <strong>Aspire hosting extensions</strong><br/>
+  Aspire hosting helpers (e.g. Signoz) for Novolis distributed apps.
+</p>
+
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-aspire/actions"><img src="https://img.shields.io/github/actions/workflow/status/Novolis-Platform/novolis-aspire/merge.yml?branch=main&label=merge&logo=github" alt="merge"/></a>
+  <a href="https://github.com/orgs/Novolis-Platform/packages?repo_name=novolis-aspire"><img src="https://img.shields.io/badge/packages-GitHub%20Packages-0a7ea3?logo=nuget" alt="packages"/></a>
+  <a href="https://github.com/Novolis-Platform"><img src="https://img.shields.io/badge/org-Novolis--Platform-111827" alt="org"/></a>
+</p>
+
+<p align="center">
+  <a href="https://nuget.pkg.github.com/Novolis-Platform/index.json"><code>https://nuget.pkg.github.com/Novolis-Platform/index.json</code></a>
+  ·
+  <a href="https://github.com/Novolis-Platform/.github/blob/main/profile/README.md">Org landing</a>
+  ·
+  <a href="https://github.com/Novolis-Platform/novolis-governance">Governance</a>
+</p>
+
+---
+<!-- novolis-marketing:end -->
 <!-- novolis-package-index:start -->
 > **GitHub Packages shows this repository README on every package page** (upstream limitation).
 > Open the **package README** for install and quick start — embedded in each .nupkg and linked below.
@@ -11,7 +43,6 @@
 For NuGet.org and Visual Studio, the **embedded** README.md inside each package is authoritative.
 
 <!-- novolis-package-index:end -->
-
 # novolis-aspire
 
 Aspire hosting integrations for the Novolis platform.
@@ -68,3 +99,4 @@ podman exec <zookeeper-container> /opt/bitnami/zookeeper/bin/zkCli.sh -server lo
 **Collector stays Waiting:** the OTLP collector `WaitForCompletion(migrator)`. First bootstrap can take several minutes; check `aspire logs signoz-migrator`.
 
 **No traces in SigNoz but dashboard works:** wire **dual OTLP** in app code — `WithSignozOtlpExporter` only sets `SIGNOZ_OTEL_EXPORTER_OTLP_*`; apps need named `AddOtlpExporter("signoz")` when that env is set (do not replace `OTEL_EXPORTER_OTLP_ENDPOINT`).
+

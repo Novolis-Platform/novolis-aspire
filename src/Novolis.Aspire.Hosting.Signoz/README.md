@@ -1,3 +1,11 @@
+<!-- novolis-pkg-brand:start -->
+<p align="center">
+  <a href="https://github.com/Novolis-Platform/novolis-aspire">
+    <img src="https://raw.githubusercontent.com/Novolis-Platform/.github/main/brand/logo-icon.svg" width="72" alt="Novolis"/>
+  </a>
+</p>
+<!-- novolis-pkg-brand:end -->
+
 # Novolis.Aspire.Hosting.Signoz
 
 Aspire hosting integration that provisions a local SigNoz observability stack (ClickHouse, ZooKeeper, UI, OTLP collector) for development.
@@ -34,3 +42,4 @@ builder.Build().Run();
 ## Support
 
 Targets local/dev stacks; container images and ports follow upstream SigNoz compose layouts.
+
