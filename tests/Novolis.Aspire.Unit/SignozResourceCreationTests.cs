@@ -6,6 +6,7 @@ using TUnit.Core;
 
 namespace Novolis.Aspire.Hosting.Signoz.Tests;
 
+[NotInParallel("SignozAssets")]
 public sealed class SignozResourceCreationTests
 {
     [Test]
